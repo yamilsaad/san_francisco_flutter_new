@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class SelectLocalidad extends StatefulWidget {
+  final Function(String) onLocalidadSelected; // agregamos esta propiedad
+
+  const SelectLocalidad({Key? key, required this.onLocalidadSelected})
+      : super(key: key);
+
   @override
   _SelectLocalidadState createState() => _SelectLocalidadState();
 }
@@ -8,7 +13,6 @@ class SelectLocalidad extends StatefulWidget {
 class _SelectLocalidadState extends State<SelectLocalidad> {
   String _selectedOption = 'Pocito';
   List<String> options = ['Pocito', 'San Juan', 'Rawson', 'Albardon'];
-  // variable de estado para manejar la selección del usuario
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +23,12 @@ class _SelectLocalidadState extends State<SelectLocalidad> {
           value: _selectedOption,
           onChanged: (String? newValue) {
             setState(() {
-              _selectedOption =
-                  newValue!; // actualiza la variable de estado con la nueva selección
+              _selectedOption = newValue!;
+              widget.onLocalidadSelected(
+                  _selectedOption); // llamamos al método onLocalidadSelected y le pasamos la nueva selección
             });
           },
-          items: <String>['Pocito', 'San Juan', 'Rawson', 'Albardon']
-              .map<DropdownMenuItem<String>>((String value) {
+          items: options.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
@@ -32,7 +36,8 @@ class _SelectLocalidadState extends State<SelectLocalidad> {
           }).toList(),
         ),
         Text(
-            'Opción seleccionada: $_selectedOption'), // muestra la opción seleccionada actualmente
+          'Opción seleccionada: $_selectedOption',
+        ),
       ],
     );
   }

@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
 
-class InputCelWidget extends StatelessWidget {
+class InputCelWidget extends StatefulWidget {
+  final TextEditingController celularController;
+
+  const InputCelWidget({Key? key, required this.celularController})
+      : super(key: key);
+
+  @override
+  _InputCelWidgetState createState() => _InputCelWidgetState();
+}
+
+class _InputCelWidgetState extends State<InputCelWidget> {
+  @override
+  void dispose() {
+    widget.celularController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    //TextEditingController _controller = TextEditingController(text: '+549');
-
     return Container(
-      margin: EdgeInsets.all(
-          16.0), // margen de 16 puntos en todos los lados del contenedor
+      margin: EdgeInsets.all(16.0),
       child: TextField(
-        //controller: _controller,
+        controller: widget.celularController,
         keyboardType: TextInputType.phone,
         decoration: InputDecoration(
             prefixIcon: Icon(Icons.phone),

@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 
 class TrabajoTipoWidget extends StatefulWidget {
+  final Function(String)
+      onTrabajoSelected; // definir un callback para la opción seleccionada
+
+  const TrabajoTipoWidget({Key? key, required this.onTrabajoSelected})
+      : super(key: key);
+
   @override
-  State<TrabajoTipoWidget> createState() => _TrabajoTipoWidgetState();
+  _TrabajoTipoWidgetState createState() => _TrabajoTipoWidgetState();
 }
 
 class _TrabajoTipoWidgetState extends State<TrabajoTipoWidget> {
@@ -21,7 +27,7 @@ class _TrabajoTipoWidgetState extends State<TrabajoTipoWidget> {
       margin: EdgeInsets.symmetric(horizontal: 15),
       child: DropdownButtonFormField<String>(
         decoration: InputDecoration(
-          labelText: 'Selecciona una opción',
+          labelText: 'El cliente tiene un recibo de:',
           border: OutlineInputBorder(),
           filled: true,
         ),
@@ -35,6 +41,8 @@ class _TrabajoTipoWidgetState extends State<TrabajoTipoWidget> {
         onChanged: (String? newValue) {
           setState(() {
             _selectedOption = newValue!;
+            widget.onTrabajoSelected(
+                newValue); // llamar al callback con la opción seleccionada
           });
         },
       ),

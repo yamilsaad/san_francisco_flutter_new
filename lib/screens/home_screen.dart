@@ -9,13 +9,14 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 5,
         toolbarHeight: 200,
         title: Padding(
           padding: const EdgeInsets.only(left: 30),
           child: Row(children: [
             Text(
               'San Francisco Hogar',
-              style: TextStyle(fontSize: 30),
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
             Icon(
               Icons.monetization_on_outlined,

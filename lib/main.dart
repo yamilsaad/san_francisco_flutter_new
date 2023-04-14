@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sfh_flutter/screens/ventas_screen.dart';
 
 import 'screens/screen.dart';
+import 'services/auth_service.dart';
 import 'themes/theme.dart';
 
 void main() => runApp(MyApp());
@@ -11,19 +13,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'San Francisco Hogar',
-      initialRoute: '/home',
-      routes: {
-        //'/login': (context) => LoginPage(),
-        '/home': (context) => HomePage(),
-        "new_client": (context) => NewClienScreen(),
-        "config_item": (context) => ConfigScreen(),
-        "ventas_item": (context) => VentasScreen(),
-        "map_item": (context) => MapScreen(),
-      },
-      theme: AppTheme.lightTheme,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => new AuthService()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'San Francisco Hogar',
+        initialRoute: '/login',
+        routes: {
+          '/login': (context) => LoginScreen(),
+          'home': (context) => HomePage(),
+          "new_client": (context) => NewClienScreen(),
+          "config_item": (context) => ConfigScreen(),
+          "ventas_item": (context) => VentasScreen(),
+          "map_item": (context) => MapScreen(),
+        },
+        theme: AppTheme.lightTheme,
+      ),
     );
   }
 }
