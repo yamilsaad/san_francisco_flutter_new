@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
           "config_item": (context) => ConfigScreen(),
           "ventas_item": (context) => VentasScreen(),
           "map_item": (context) => MapScreen(),
+          "search_item": (context) => SearchScreen(),
         },
         theme: AppTheme.lightTheme,
       ),

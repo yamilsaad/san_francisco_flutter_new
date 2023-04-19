@@ -24,6 +24,9 @@ class MenuOption extends StatelessWidget {
         _menuItem4(context, 'Map', Icons.location_on, Colors.grey, '/opcion4',
             size: 100,
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
+        _menuItem5(context, 'Buscar', Icons.search, Colors.grey, '/opcion5',
+            size: 100,
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
       ],
     );
   }
@@ -167,6 +170,47 @@ Widget _menuItem4(BuildContext context, String title, IconData icon,
         boxShadow: [
           BoxShadow(
             color: Colors.green,
+            blurRadius: 5.0,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            color: Colors.white,
+            size: 40,
+          ),
+          SizedBox(
+            height: 16.0,
+          ),
+          Text(
+            title,
+            style: TextStyle(color: Colors.white, fontSize: 18.0),
+          )
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _menuItem5(BuildContext context, String title, IconData icon,
+    Color color, String route,
+    {double size = 100, EdgeInsets padding = EdgeInsets.zero}) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.of(context).pushNamed('search_item');
+    },
+    child: Container(
+      margin: EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Colors.indigo.shade700,
+        borderRadius: BorderRadius.circular(16.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
             blurRadius: 5.0,
             offset: Offset(0, 3),
           ),
