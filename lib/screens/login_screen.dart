@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../UI/input_decoration.dart';
 import '../providers/login_form_provider.dart';
+import '../services/auth_service.dart';
 import '../widgets/widget.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -68,14 +69,14 @@ class _LoginForm extends StatelessWidget {
                     labelText: 'Correo electronico',
                     prefixIcon: Icons.alternate_email_outlined),
                 onChanged: (value) => loginForm.email = value,
-                validator: (value) {
+                /*validator: (value) {
                   String pattern =
                       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
                   RegExp regExp = new RegExp(pattern);
                   return regExp.hasMatch(value ?? '')
                       ? null
                       : '¡Error al ingresar la direccion de correo!';
-                },
+                },*/
               ),
               SizedBox(height: 30),
               TextFormField(
@@ -87,28 +88,29 @@ class _LoginForm extends StatelessWidget {
                     labelText: 'Contraseña',
                     prefixIcon: Icons.lock_outline),
                 onChanged: (value) => loginForm.password = value,
-                validator: (value) {
+                /*validator: (value) {
                   return (value != null && value.length >= 6)
                       ? null
                       : '¡La contraseña debe tener 6 caracteres!';
-                },
+                },*/
               ),
               SizedBox(height: 30),
               MaterialButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  disabledColor: Colors.grey,
-                  elevation: 0,
-                  color: Colors.blue.shade700,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
-                    child: Text(
-                      loginForm.isLoading ? 'Espere...' : 'Ingresar',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                disabledColor: Colors.grey,
+                elevation: 0,
+                color: Colors.blue.shade700,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                  child: Text(
+                    loginForm.isLoading ? 'Espere...' : 'Ingresar',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
-                  //LoginForm llamado en este botón
-                  onPressed: loginForm.isLoading
+                ),
+                //LoginForm llamado en este botón
+
+                /*onPressed: loginForm.isLoading
                       ? null
                       : () async {
                           FocusScope.of(context).unfocus();
@@ -120,7 +122,34 @@ class _LoginForm extends StatelessWidget {
                           await Future.delayed(Duration(seconds: 2));
                           //TODO: VALIDAR SI LOGIN ES CORRECTO!!!
                           Navigator.pushReplacementNamed(context, 'home');
-                        })
+                        }*/
+
+                onPressed: loginForm.isLoading
+                    ? null
+                    : () async {
+                        FocusScope.of(context).unfocus();
+
+                        if (!loginForm.isValidForm()) return;
+
+                        loginForm.isLoading = true;
+
+                        final authService =
+                            Provider.of<AuthService>(context, listen: false);
+                        final success = await authService.authenticate(
+                            loginForm.email, loginForm.password);
+
+                        if (success) {
+                          Navigator.pushReplacementNamed(context, 'home');
+                        } else {
+                          // Mostrar mensaje de error
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('Usuario o contraseña incorrectos'),
+                          ));
+                        }
+
+                        loginForm.isLoading = false;
+                      },
+              )
             ],
           )),
     );

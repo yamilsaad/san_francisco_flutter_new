@@ -7,10 +7,7 @@ class ConfigScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Configuracion'),
       ),
-      body: Center(
-          child: Container(
-        child: Text('Configuración'),
-      )),
+      body: Center(child: Column(children: [Text('Configuración')])),
     );
   }
 }

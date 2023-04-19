@@ -9,6 +9,7 @@ class VentasScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Ventas'),
         toolbarHeight: 80,
+        backgroundColor: Colors.green,
       ),
       body: Center(
           child: Container(

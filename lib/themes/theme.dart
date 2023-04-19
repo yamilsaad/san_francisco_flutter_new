@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppTheme {
+class AppTheme with ChangeNotifier {
   static Color primary = Colors.blue.shade700;
 
   static final ThemeData lightTheme = ThemeData.light().copyWith(
@@ -43,4 +43,12 @@ class AppTheme {
               bottomLeft: Radius.circular(10), topRight: Radius.circular(10))),
     ),
   );
+
+  ThemeData _themeData;
+  AppTheme(this._themeData);
+  getTheme() => _themeData;
+  setTheme(ThemeData theme) {
+    this._themeData = theme;
+    notifyListeners();
+  }
 }
