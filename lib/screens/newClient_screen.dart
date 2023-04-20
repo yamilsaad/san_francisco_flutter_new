@@ -14,6 +14,8 @@ class NewClienScreen extends StatefulWidget {
 }
 
 class _NewClienScreenState extends State<NewClienScreen> {
+  bool _isContainerVisible = false;
+
   String _data = "";
 
   String selectedLocalidad = '';
@@ -27,10 +29,10 @@ class _NewClienScreenState extends State<NewClienScreen> {
   }
 
   //TODO...........................................
-  void _sendData() async {
+  void _sendData(DateTime fechaHora) async {
     //!Ingresar Web Service!!!!!!!!!
     final url =
-        Uri.parse('http://localhost:8083/datasnap/rest/TSFHWebSvr/usuario/');
+        Uri.parse('http://192.168.1.227:8080/datasnap/rest/TSFHWebSvr/usuario');
     final headers = {'Content-Type': 'application/json'};
     final body = {
       'localidad':
@@ -41,6 +43,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
       'infoDni': _data,
       'fotos':
           [], // aquí puedes agregar las rutas de las fotos que hayas tomado en tu app
+      'fecha': DateTime.now().toString() // incluye la fecha y hora actual
     };
 
     final response =
@@ -107,6 +110,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
   @override
   Widget build(BuildContext context) {
     TextEditingController _celularController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
@@ -146,6 +150,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
                           ),
                         ),
                       ),
+
                       SizedBox(height: 10),
                       //*Select con localidad:
                       SelectLocalidad(onLocalidadSelected: (String localidad) {
@@ -161,9 +166,28 @@ class _NewClienScreenState extends State<NewClienScreen> {
                           // Aquí puedes hacer lo que necesites con el valor seleccionado
                         },
                       ),
+                      SizedBox(height: 15),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 30),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Center(
+                            child: Text(
+                              '#1 Scanear DNI',
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
                       SizedBox(height: 5),
                       //*Información Scaneada:
-                      InfoDniWidget(data: _data),
+                      Visibility(
+                          visible: _isContainerVisible,
+                          child: InfoDniWidget(data: _data)),
                       SizedBox(
                         height: 5,
                       ),
@@ -173,7 +197,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
                           padding: const EdgeInsets.all(5),
                           child: Center(
                             child: Text(
-                              'Foto de Cliente, Recibo de sueldo, Boleta de Srevicio y DNI',
+                              '#2 Foto de Cliente, Recibo de sueldo, Boleta de Srevicio y DNI',
                               style: TextStyle(
                                   fontSize: 25,
                                   color: Colors.blue,
@@ -198,6 +222,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
                   height: 200,
                 ),
                 SizedBox(height: 30),
+                //Botón ENVIAR con un ALERT:
                 SizedBox(
                   width: double.infinity,
                   child: TextButton(
@@ -207,7 +232,37 @@ class _NewClienScreenState extends State<NewClienScreen> {
                           (states) => Colors.green),
                     ),
                     onPressed: () {
-                      _sendData();
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            title:
+                                Text('¿Está seguro de enviar la información?'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('Cancelar'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: Text('OK'),
+                                onPressed: () {
+                                  // Obtener la fecha y hora actual
+                                  DateTime now = DateTime.now();
+
+                                  // Agregar la fecha y hora actual a la información enviada
+                                  _sendData(now);
+
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                     child: Text(
                       'Enviar',
@@ -231,7 +286,13 @@ class _NewClienScreenState extends State<NewClienScreen> {
             hoverElevation: 5.0,
             highlightElevation: 12.0,
             backgroundColor: Colors.orange.shade700,
-            onPressed: () => _scan(),
+            onPressed: () {
+              // Ejecutar alguna acción que debe hacer visible el Container
+              setState(() {
+                _isContainerVisible = true;
+              });
+              _scan();
+            },
             child: Icon(
               Icons.qr_code,
               size: 40,
@@ -242,29 +303,3 @@ class _NewClienScreenState extends State<NewClienScreen> {
     );
   }
 }
-
-
-/*
-class ScanerInfo extends StatefulWidget {
-  @override
-  State<ScanerInfo> createState() => _ScanerInfoState();
-}
-
-class _ScanerInfoState extends State<ScanerInfo> {
-  String _data = "";
-
-  _scan() async {
-    return await FlutterBarcodeScanner.scanBarcode(
-        "#000000", "Cancel", true, ScanMode.BARCODE).then((value) => setState(()=>_data = value));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child:FloatingActionButton(
-          onPressed: () => _scan(),
-        ),
-    );
-  }
-}
-*/
