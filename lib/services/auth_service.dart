@@ -4,7 +4,7 @@ import 'dart:convert';
 
 class AuthService extends ChangeNotifier {
   final _baseUrl =
-      Uri.parse('http://192.168.1.108:8080/datasnap/rest/TSFHWebSvr/usuario');
+      Uri.parse('http://192.168.1.235:8080/datasnap/rest/TSFHWebSvr/usuario');
   //final String _webserviceToken = '';
 
   Future<bool> authenticate(String email, String password) async {
