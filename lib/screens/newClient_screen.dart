@@ -22,17 +22,64 @@ class _NewClienScreenState extends State<NewClienScreen> {
   TextEditingController celularController = TextEditingController();
   String selectedTrabajo = '';
 
+  final TextEditingController _textFieldController = TextEditingController();
+
   void _clearData() {
     setState(
       () => _data = "",
     );
   }
 
+  void _showAlertDialog(String title, String content) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _searchCustomer() async {
+    final customerNumber = _textFieldController.text.trim();
+    if (customerNumber.isEmpty) {
+      _showAlertDialog('Número de cliente o DNI vacío',
+          'Ingrese un número de cliente o DNI válido');
+      return;
+    }
+
+    final url = Uri.parse(
+        'http://192.168.1.226:8080/datasnap/rest/TSFHWebSvr/cliente/$customerNumber');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      final name = jsonResponse['name'];
+      final lastName = jsonResponse['lastName'];
+      final address = jsonResponse['address'];
+
+      final customerInfo =
+          'Nombre: $name\nApellido: $lastName\nDomicilio: $address';
+      _showAlertDialog('Cliente encontrado', customerInfo);
+    } else if (response.statusCode == 404) {
+      _showAlertDialog('Cliente no encontrado',
+          'El cliente con el número $customerNumber no existe.');
+    } else {
+      _showAlertDialog('Error', 'Ha ocurrido un error al buscar el cliente.');
+    }
+  }
+
   //TODO...........................................
   void _sendData(DateTime fechaHora) async {
     //!Ingresar Web Service!!!!!!!!!
     final url =
-        Uri.parse('http://192.168.1.227:8080/datasnap/rest/TSFHWebSvr/usuario');
+        Uri.parse('http://192.168.1.226:8080/datasnap/rest/TSFHWebSvr/usuario');
     final headers = {'Content-Type': 'application/json'};
     final body = {
       'localidad':
@@ -149,6 +196,12 @@ class _NewClienScreenState extends State<NewClienScreen> {
                             textAlign: TextAlign.center,
                           ),
                         ),
+                      ),
+                      SizedBox(height: 10),
+
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        child: SearchClient(),
                       ),
 
                       SizedBox(height: 10),
@@ -300,6 +353,25 @@ class _NewClienScreenState extends State<NewClienScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  TextField SearchClient() {
+    return TextField(
+      controller: _textFieldController,
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+          labelText: 'Número de cliente o DNI',
+          border: OutlineInputBorder(),
+          suffixIcon: IconButton(
+              onPressed: () {
+                _searchCustomer;
+              },
+              icon: Icon(
+                Icons.search,
+                size: 30,
+                color: Colors.green,
+              ))),
     );
   }
 }

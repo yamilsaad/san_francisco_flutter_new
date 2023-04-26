@@ -25,17 +25,21 @@ class HomePage extends StatelessWidget {
           ]),
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(height: 50),
-          Container(
-            width: 400,
-            height: 500,
-            margin: EdgeInsets.symmetric(horizontal: 10),
-            //Acá va el menu option creado!
-            child: MenuOption(),
-          ),
-        ],
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            SizedBox(height: 50),
+            Container(
+              width: 400,
+              height: 500,
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              //Acá va el menu option creado!
+              child: MenuOption(),
+            ),
+            SizedBox(height: 30)
+          ],
+        ),
       ),
       bottomNavigationBar: BottomAppBar(),
     );

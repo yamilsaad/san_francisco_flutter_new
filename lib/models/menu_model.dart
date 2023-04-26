@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../screens/screen.dart';
-
 class MenuOption extends StatelessWidget {
   const MenuOption({Key? key});
 
@@ -27,6 +25,7 @@ class MenuOption extends StatelessWidget {
         _menuItem5(context, 'Buscar', Icons.search, Colors.grey, '/opcion5',
             size: 100,
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
+        SizedBox(height: 50),
       ],
     );
   }

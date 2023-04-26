@@ -23,19 +23,19 @@ class _SearchScreenState extends State<SearchScreen> {
       _isLoading = true;
     });
 
-    final response =
-        await http.get(Uri.parse('https://example.com/customer/$_docNumber'));
+    final response = await http.get(Uri.parse(
+        'http://192.168.1.233:8080/datasnap/rest/TSFHWebSvr/cliente/$_docNumber'));
 
     setState(() {
       _isLoading = false;
       final data = json.decode(response.body);
-      _customerNumber = data['customerNumber'];
-      _firstName = data['firstName'];
-      _lastName = data['lastName'];
-      _address = data['address'];
-      _phoneNumber = data['phoneNumber'];
-      _lastUpdated = data['lastUpdated'];
-      _score = data['score'];
+      //_customerNumber = data['customerNumber'];
+      _firstName = data['NOMBRE'];
+      _lastName = data['APELLIDO'];
+      _address = data['DOMICILIO1'];
+      //_phoneNumber = data['phoneNumber'];
+      //_lastUpdated = data['lastUpdated'];
+      //_score = data['score'];
     });
   }
 
