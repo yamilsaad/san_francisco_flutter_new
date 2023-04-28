@@ -110,7 +110,7 @@ class _LoginForm extends StatelessWidget {
                 ),
                 //LoginForm llamado en este botón
 
-                /*  onPressed: loginForm.isLoading //loading sin conexión!
+                /*onPressed: loginForm.isLoading //loading sin conexión!
                       ? null
                       : () async {
                           FocusScope.of(context).unfocus();

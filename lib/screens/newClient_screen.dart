@@ -117,7 +117,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
         // Se verifica si no se ha cancelado la operación
         List<String> dataValues = scannedData.split("@");
         String formattedData =
-            "Tramite: ${dataValues[0]}, Apellido: ${dataValues[1]}, Nombre: ${dataValues[2]} Sexo: ${dataValues[3]}-DNI: ${dataValues[4]}, Clase: ${dataValues[5]}, Fecha de vencimiento: ${dataValues[6]} - ${dataValues[7]}, Numero: ${dataValues[8]}";
+            "Tramite: ${dataValues[0]}, Apellido: ${dataValues[1]}, Nombre: ${dataValues[2]} Sexo: ${dataValues[3]}, DNI: ${dataValues[4]}, Clase: ${dataValues[5]}, Fecha de vencimiento: ${dataValues[6]} - ${dataValues[7]}, Numero: ${dataValues[8]}";
         setState(() => _data = formattedData);
 
         // Realizar la petición GET para verificar si el cliente ya existe
@@ -129,7 +129,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
           // El web service respondió correctamente
           final jsonResponse = jsonDecode(response.body);
           final clienteExistente = jsonResponse['result'];
-          if (clienteExistente) {
+          if (clienteExistente != null && clienteExistente) {
             showDialog(
               context: context,
               builder: (_) => AlertDialog(
@@ -162,7 +162,21 @@ class _NewClienScreenState extends State<NewClienScreen> {
           }
         } else {
           // El web service respondió con un error
+          await showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: Text("Agregar cliente"),
+              content: Text("Web Service no responde"),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text("OK"),
+                ),
+              ],
+            ),
+          );
           print('Error al verificar si el cliente existe');
+          return;
         }
       }
     } on PlatformException catch (e) {
@@ -316,7 +330,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
                     ],
                   ),
                 ),
-                Container(
+                /*Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -324,11 +338,11 @@ class _NewClienScreenState extends State<NewClienScreen> {
                   ),
                   width: double.infinity,
                   height: 200,
-                ),
+                ),*/
                 SizedBox(height: 30),
                 //Botón ENVIAR con un ALERT:
                 SizedBox(
-                  width: double.infinity,
+                  width: 350,
                   child: TextButton(
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all(EdgeInsets.all(15)),
@@ -374,7 +388,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 0),
+                SizedBox(height: 50),
               ],
             ),
           ],
