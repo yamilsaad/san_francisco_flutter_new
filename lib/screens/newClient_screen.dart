@@ -30,12 +30,15 @@ class _NewClienScreenState extends State<NewClienScreen> {
     );
   }
 
-  void _showAlertDialog(String title, String content) {
+  /*void _showAlertDialog(String title, String content) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         title: Text(title),
-        content: Text(content),
+        content: Flexible(
+          child: Text(content),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -44,9 +47,9 @@ class _NewClienScreenState extends State<NewClienScreen> {
         ],
       ),
     );
-  }
+  }*/
 
-  void _searchCustomer() async {
+  /*void _searchCustomer() async {
     final customerNumber = _textFieldController.text.trim();
     if (customerNumber.isEmpty) {
       _showAlertDialog('Número de cliente o DNI vacío',
@@ -55,14 +58,14 @@ class _NewClienScreenState extends State<NewClienScreen> {
     }
 
     final url = Uri.parse(
-        'http://192.168.1.226:8080/datasnap/rest/TSFHWebSvr/cliente/$customerNumber');
+        'http://192.168.1.228:8080/datasnap/rest/TSFHWebSvr/cliente/$customerNumber');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final name = jsonResponse['name'];
-      final lastName = jsonResponse['lastName'];
-      final address = jsonResponse['address'];
+      final name = jsonResponse['NOMBRE'];
+      final lastName = jsonResponse['APELLIDO'];
+      final address = jsonResponse['DOMICILIO1'];
 
       final customerInfo =
           'Nombre: $name\nApellido: $lastName\nDomicilio: $address';
@@ -73,16 +76,16 @@ class _NewClienScreenState extends State<NewClienScreen> {
     } else {
       _showAlertDialog('Error', 'Ha ocurrido un error al buscar el cliente.');
     }
-  }
+  }*/
 
   //TODO...........................................
   void _sendData(DateTime fechaHora) async {
     //!Ingresar Web Service!!!!!!!!!
     final url =
-        Uri.parse('http://192.168.1.226:8080/datasnap/rest/TSFHWebSvr/usuario');
+        Uri.parse('http://192.168.1.229:8080/datasnap/rest/TSFHWebSvr/usuario');
     final headers = {'Content-Type': 'application/json'};
     final body = {
-      'localidad':
+      'DOMICILIO1':
           selectedLocalidad, // remplaza selectedLocalidad con la variable que contiene el valor seleccionado en tu SelectLocalidad
       'celular': celularController.text,
       'trabajo':
@@ -116,6 +119,51 @@ class _NewClienScreenState extends State<NewClienScreen> {
         String formattedData =
             "Tramite: ${dataValues[0]}, Apellido: ${dataValues[1]}, Nombre: ${dataValues[2]} Sexo: ${dataValues[3]}-DNI: ${dataValues[4]}, Clase: ${dataValues[5]}, Fecha de vencimiento: ${dataValues[6]} - ${dataValues[7]}, Numero: ${dataValues[8]}";
         setState(() => _data = formattedData);
+
+        // Realizar la petición GET para verificar si el cliente ya existe
+        final dni = dataValues[4];
+        final url = Uri.parse(
+            'http://192.168.1.229:8080/datasnap/rest/TSFHWebSvr/cliente/$dni');
+        final response = await http.get(url);
+        if (response.statusCode == 200) {
+          // El web service respondió correctamente
+          final jsonResponse = jsonDecode(response.body);
+          final clienteExistente = jsonResponse['result'];
+          if (clienteExistente) {
+            showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                title: Text("Cliente existente"),
+                content: Text(
+                    "El cliente con DNI $dni ya existe en la base de datos."),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text("OK"),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                title: Text("Agregar cliente"),
+                content: Text(
+                    "El cliente con DNI $dni no existe en la base de datos. Debe agregarlo."),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text("OK"),
+                  ),
+                ],
+              ),
+            );
+          }
+        } else {
+          // El web service respondió con un error
+          print('Error al verificar si el cliente existe');
+        }
       }
     } on PlatformException catch (e) {
       if (e.code == 'PERMISSION_DENIED') {
@@ -199,10 +247,13 @@ class _NewClienScreenState extends State<NewClienScreen> {
                       ),
                       SizedBox(height: 10),
 
+                      //*Busqueda de cliente
+                      /*
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        padding: EdgeInsets.symmetric(horizontal: 20),
                         child: SearchClient(),
                       ),
+                      */
 
                       SizedBox(height: 10),
                       //*Select con localidad:
@@ -355,7 +406,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
       ),
     );
   }
-
+  /*
   TextField SearchClient() {
     return TextField(
       controller: _textFieldController,
@@ -364,14 +415,12 @@ class _NewClienScreenState extends State<NewClienScreen> {
           labelText: 'Número de cliente o DNI',
           border: OutlineInputBorder(),
           suffixIcon: IconButton(
-              onPressed: () {
-                _searchCustomer;
-              },
+              onPressed: _searchCustomer,
               icon: Icon(
                 Icons.search,
                 size: 30,
                 color: Colors.green,
               ))),
     );
-  }
+  }*/
 }

@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
         elevation: 5,
         toolbarHeight: 200,
         title: Padding(
-          padding: const EdgeInsets.only(left: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(children: [
             Text(
               'San Francisco Hogar',
@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
             ),
             Icon(
               Icons.monetization_on_outlined,
-              size: 50,
+              size: 30,
             )
           ]),
         ),
