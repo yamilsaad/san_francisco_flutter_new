@@ -96,21 +96,21 @@ class _LoginForm extends StatelessWidget {
               ),
               SizedBox(height: 30),
               MaterialButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                disabledColor: Colors.grey,
-                elevation: 0,
-                color: Colors.blue.shade700,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
-                  child: Text(
-                    loginForm.isLoading ? 'Espere...' : 'Ingresar',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  disabledColor: Colors.grey,
+                  elevation: 0,
+                  color: Colors.blue.shade700,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                    child: Text(
+                      loginForm.isLoading ? 'Espere...' : 'Ingresar',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
                   ),
-                ),
-                //LoginForm llamado en este botón
+                  //LoginForm llamado en este botón
 
-                /*onPressed: loginForm.isLoading //loading sin conexión!
+                  onPressed: loginForm.isLoading //loading sin conexión!
                       ? null
                       : () async {
                           FocusScope.of(context).unfocus();
@@ -122,9 +122,9 @@ class _LoginForm extends StatelessWidget {
                           await Future.delayed(Duration(seconds: 2));
                           //TODO: VALIDAR SI LOGIN ES CORRECTO!!!
                           Navigator.pushReplacementNamed(context, 'home');
-                        }*/
+                        }
 
-                onPressed: loginForm.isLoading
+                  /*onPressed: loginForm.isLoading
                     ? null
                     : () async {
                         FocusScope.of(context).unfocus();
@@ -148,8 +148,8 @@ class _LoginForm extends StatelessWidget {
                         }
 
                         loginForm.isLoading = false;
-                      },
-              )
+                      },*/
+                  )
             ],
           )),
     );

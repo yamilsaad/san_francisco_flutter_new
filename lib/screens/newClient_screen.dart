@@ -82,7 +82,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
   void _sendData(DateTime fechaHora) async {
     //!Ingresar Web Service!!!!!!!!!
     final url =
-        Uri.parse('http://192.168.1.229:8080/datasnap/rest/TSFHWebSvr/usuario');
+        Uri.parse('http://192.168.1.230:8080/datasnap/rest/TSFHWebSvr/usuario');
     final headers = {'Content-Type': 'application/json'};
     final body = {
       'DOMICILIO1':
@@ -123,7 +123,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
         // Realizar la petición GET para verificar si el cliente ya existe
         final dni = dataValues[4];
         final url = Uri.parse(
-            'http://192.168.1.229:8080/datasnap/rest/TSFHWebSvr/cliente/$dni');
+            'http://192.168.1.230:8080/datasnap/rest/TSFHWebSvr/cliente/$dni');
         final response = await http.get(url);
         if (response.statusCode == 200) {
           // El web service respondió correctamente
@@ -247,18 +247,9 @@ class _NewClienScreenState extends State<NewClienScreen> {
                   child: Column(
                     children: [
                       SizedBox(height: 50),
-                      Container(
-                        child: Center(
-                          child: Text(
-                            'Informacion Nuevo Cliente',
-                            style: TextStyle(
-                                fontSize: 25,
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
+
+                      TextInfoNewClient(), //Titulo info nuevo cliente
+
                       SizedBox(height: 10),
 
                       //*Busqueda de cliente
@@ -285,22 +276,8 @@ class _NewClienScreenState extends State<NewClienScreen> {
                         },
                       ),
                       SizedBox(height: 15),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 30),
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Center(
-                            child: Text(
-                              '#1 Scanear DNI',
-                              style: TextStyle(
-                                  fontSize: 25,
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                      ),
+
+                      TextInfoDNI(), //Titulo Info DNI
                       SizedBox(height: 5),
                       //*Información Scaneada:
                       Visibility(
@@ -309,22 +286,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
                       SizedBox(
                         height: 5,
                       ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 30),
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Center(
-                            child: Text(
-                              '#2 Foto de Cliente, Recibo de sueldo, Boleta de Srevicio y DNI',
-                              style: TextStyle(
-                                  fontSize: 25,
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                      ),
+                      TextTitleFotos(),
                       //*Fotos sacadas:
                       ImageCam(),
                     ],
@@ -340,53 +302,10 @@ class _NewClienScreenState extends State<NewClienScreen> {
                   height: 200,
                 ),*/
                 SizedBox(height: 30),
-                //Botón ENVIAR con un ALERT:
                 SizedBox(
+                  //Botón ENVIAR con un ALERT:
                   width: 350,
-                  child: TextButton(
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(EdgeInsets.all(15)),
-                      backgroundColor: MaterialStateColor.resolveWith(
-                          (states) => Colors.green),
-                    ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            title:
-                                Text('¿Está seguro de enviar la información?'),
-                            actions: <Widget>[
-                              TextButton(
-                                child: Text('Cancelar'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              TextButton(
-                                child: Text('OK'),
-                                onPressed: () {
-                                  // Obtener la fecha y hora actual
-                                  DateTime now = DateTime.now();
-
-                                  // Agregar la fecha y hora actual a la información enviada
-                                  _sendData(now);
-
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: Text(
-                      'Enviar',
-                      style: TextStyle(color: Colors.white, fontSize: 25),
-                    ),
-                  ),
+                  child: buttonSend(context),
                 ),
                 SizedBox(height: 50),
               ],
@@ -395,28 +314,81 @@ class _NewClienScreenState extends State<NewClienScreen> {
         ),
       ),
       //*Barra inferior con botón de Scanner
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.blue.shade700,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: FloatingActionButton(
-            elevation: 5,
-            hoverElevation: 5.0,
-            highlightElevation: 12.0,
-            backgroundColor: Colors.orange.shade700,
-            onPressed: () {
-              // Ejecutar alguna acción que debe hacer visible el Container
-              setState(() {
-                _isContainerVisible = true;
-              });
-              _scan();
-            },
-            child: Icon(
-              Icons.qr_code,
-              size: 40,
-            ),
+      bottomNavigationBar:
+          buttonScanner(), //Botón de scanneo naranja en AppBarBottom!
+    );
+  }
+
+  //Botón de scanneo en AppBarBottom:
+  BottomAppBar buttonScanner() {
+    return BottomAppBar(
+      color: Colors.blue.shade700,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: FloatingActionButton(
+          elevation: 5,
+          hoverElevation: 5.0,
+          highlightElevation: 12.0,
+          backgroundColor: Colors.orange.shade700,
+          onPressed: () {
+            // Ejecutar alguna acción que debe hacer visible el Container
+            setState(() {
+              _isContainerVisible = true;
+            });
+            _scan();
+          },
+          child: Icon(
+            Icons.qr_code,
+            size: 40,
           ),
         ),
+      ),
+    );
+  }
+
+  //Método extraido/Botón de envir con alert de confirmacion:
+  TextButton buttonSend(BuildContext context) {
+    return TextButton(
+      style: ButtonStyle(
+        padding: MaterialStateProperty.all(EdgeInsets.all(15)),
+        backgroundColor:
+            MaterialStateColor.resolveWith((states) => Colors.green),
+      ),
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              title: Text('¿Está seguro de enviar la información?'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Cancelar'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    // Obtener la fecha y hora actual
+                    DateTime now = DateTime.now();
+
+                    // Agregar la fecha y hora actual a la información enviada
+                    _sendData(now);
+
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+      child: Text(
+        'Enviar',
+        style: TextStyle(color: Colors.white, fontSize: 25),
       ),
     );
   }
@@ -437,4 +409,75 @@ class _NewClienScreenState extends State<NewClienScreen> {
               ))),
     );
   }*/
+}
+
+//Titulo de fotos sacadas:
+class TextTitleFotos extends StatelessWidget {
+  const TextTitleFotos({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 30),
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: Center(
+          child: Text(
+            '#2 Foto de Cliente, Recibo de sueldo, Boleta de Srevicio y DNI',
+            style: TextStyle(
+                fontSize: 25, color: Colors.blue, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+//Titulo info dni:
+class TextInfoDNI extends StatelessWidget {
+  const TextInfoDNI({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 30),
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: Center(
+          child: Text(
+            '#1 Scanear DNI',
+            style: TextStyle(
+                fontSize: 25, color: Colors.blue, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+//Titulo info nuevo cliente:
+class TextInfoNewClient extends StatelessWidget {
+  const TextInfoNewClient({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Center(
+        child: Text(
+          'Informacion Nuevo Cliente',
+          style: TextStyle(
+              fontSize: 25, color: Colors.blue, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
 }

@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sfh_flutter/screens/ventas_screen.dart';
+import 'package:sfh_flutter/share_preferences/preferences.dart';
 
+import 'providers/themes_provider.dart';
 import 'screens/screen.dart';
 import 'services/auth_service.dart';
 import 'themes/theme.dart';
 //import 'roles/user_roles.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Preferences.init();
+
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+          create: (_) => ThemeProvider(isDarkmode: Preferences.isDarkmode))
+    ],
+    child: const MyApp(),
+  ));
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -31,7 +45,7 @@ class MyApp extends StatelessWidget {
           "map_item": (context) => MapScreen(),
           "search_item": (context) => SearchScreen(),
         },
-        theme: AppTheme.lightTheme,
+        theme: Provider.of<ThemeProvider>(context).currentTheme,
       ),
     );
   }
