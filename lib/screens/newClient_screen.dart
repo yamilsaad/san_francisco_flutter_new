@@ -22,8 +22,6 @@ class _NewClienScreenState extends State<NewClienScreen> {
   TextEditingController celularController = TextEditingController();
   String selectedTrabajo = '';
 
-  final TextEditingController _textFieldController = TextEditingController();
-
   void _clearData() {
     setState(
       () => _data = "",
@@ -91,6 +89,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
       'trabajo':
           selectedTrabajo, // remplaza selectedTrabajo con la variable que contiene el valor seleccionado en tu TrabajoTipoWidget
       'infoDni': _data,
+      'foto_usuario': [],
       'fotos':
           [], // aquí puedes agregar las rutas de las fotos que hayas tomado en tu app
       'fecha': DateTime.now().toString() // incluye la fecha y hora actual
@@ -288,6 +287,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
                       ),
                       TextTitleFotos(),
                       //*Fotos sacadas:
+                      ImageUsuario(),
                       ImageCam(),
                     ],
                   ),
