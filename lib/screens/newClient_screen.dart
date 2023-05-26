@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
 
+import '../alerts/alert.dart';
+import '../components/component.dart';
 import '../widgets/widget.dart';
 
 class NewClienScreen extends StatefulWidget {
@@ -14,20 +16,24 @@ class NewClienScreen extends StatefulWidget {
 }
 
 class _NewClienScreenState extends State<NewClienScreen> {
+  //*______________________________
   bool _isContainerVisible = false;
+  //invisibiliza contenedor.
 
   String _data = "";
-
+  //variable donde se guarda la información escaneada(_data)
   String selectedLocalidad = '';
+  //variable donde se guarda localidad seleccionada.
   TextEditingController celularController = TextEditingController();
   String selectedTrabajo = '';
-
+  //*______________________________________-__________
   void _clearData() {
     setState(
-      () => _data = "",
+      () =>
+          _data = "", //función para hacer limpieza de datos(solo limpia string)
     );
   }
-
+  //*_____________________________________________________
   /*void _showAlertDialog(String title, String content) {
     showDialog(
       context: context,
@@ -77,10 +83,11 @@ class _NewClienScreenState extends State<NewClienScreen> {
   }*/
 
   //TODO...........................................
+  //LÓGICA DE ENVÍO DE GUARDADO Y ENVIOS DE DATOS (WEBSERVICE)
   void _sendData(DateTime fechaHora) async {
     //!Ingresar Web Service!!!!!!!!!
     final url =
-        Uri.parse('http://192.168.1.230:8080/datasnap/rest/TSFHWebSvr/usuario');
+        Uri.parse('http://192.168.1.102:8080/datasnap/rest/TSFHWebSvr/usuario');
     final headers = {'Content-Type': 'application/json'};
     final body = {
       'DOMICILIO1':
@@ -108,6 +115,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
   }
 //TODO.................................
 
+  //LÓGICA DE SCANNER
   Future<void> _scan() async {
     try {
       String scannedData = await FlutterBarcodeScanner.scanBarcode(
@@ -122,7 +130,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
         // Realizar la petición GET para verificar si el cliente ya existe
         final dni = dataValues[4];
         final url = Uri.parse(
-            'http://192.168.1.230:8080/datasnap/rest/TSFHWebSvr/cliente/$dni');
+            'http://192.168.1.102:8080/datasnap/rest/TSFHWebSvr/cliente/$dni');
         final response = await http.get(url);
         if (response.statusCode == 200) {
           // El web service respondió correctamente
@@ -161,19 +169,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
           }
         } else {
           // El web service respondió con un error
-          await showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-              title: Text("Agregar cliente"),
-              content: Text("Web Service no responde"),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text("OK"),
-                ),
-              ],
-            ),
-          );
+          //await DialogService.showAlertDialog(context);
           print('Error al verificar si el cliente existe');
           return;
         }
@@ -196,21 +192,11 @@ class _NewClienScreenState extends State<NewClienScreen> {
           ),
         );
       } else {
-        // Error desconocido
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: Text("Error"),
-            content:
-                Text("Ha ocurrido un error al intentar escanear el código."),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text("OK"),
-              ),
-            ],
-          ),
-        );
+        //* El web service respondió con un error
+        await AlertScanner.showErrorDialog(
+            context, "Ha ocurrido un error al intentar escanear el código.");
+        print('Error al verificar si el cliente existe');
+        return;
       }
     }
   }
@@ -303,9 +289,10 @@ class _NewClienScreenState extends State<NewClienScreen> {
                 ),*/
                 SizedBox(height: 30),
                 SizedBox(
-                  //Botón ENVIAR con un ALERT:
+                  //*Botón ENVIAR con un ALERT:
                   width: 350,
-                  child: buttonSend(context),
+                  child: ButtonSend().buttonSend(
+                      context), //instancia de ButtonSend llamando el metodo buttonSend.
                 ),
                 SizedBox(height: 50),
               ],
@@ -346,52 +333,6 @@ class _NewClienScreenState extends State<NewClienScreen> {
     );
   }
 
-  //Método extraido/Botón de envir con alert de confirmacion:
-  TextButton buttonSend(BuildContext context) {
-    return TextButton(
-      style: ButtonStyle(
-        padding: MaterialStateProperty.all(EdgeInsets.all(15)),
-        backgroundColor:
-            MaterialStateColor.resolveWith((states) => Colors.green),
-      ),
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              title: Text('¿Está seguro de enviar la información?'),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('Cancelar'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                TextButton(
-                  child: Text('OK'),
-                  onPressed: () {
-                    // Obtener la fecha y hora actual
-                    DateTime now = DateTime.now();
-
-                    // Agregar la fecha y hora actual a la información enviada
-                    _sendData(now);
-
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      },
-      child: Text(
-        'Enviar',
-        style: TextStyle(color: Colors.white, fontSize: 25),
-      ),
-    );
-  }
   /*
   TextField SearchClient() {
     return TextField(

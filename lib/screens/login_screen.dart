@@ -1,47 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../UI/input_decoration.dart';
+import '../layouts/layout.dart';
 import '../providers/login_form_provider.dart';
 import '../services/auth_service.dart';
 import '../widgets/widget.dart';
+import 'package:sfh_flutter/components/component.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Widget myButton = ButtonRegister.registerButton(context);
+
     return Scaffold(
       backgroundColor: Colors.grey.shade400,
       body: AuthBackground(
-        //el SingleChildScrollView me va a permitir que haga scroll si los hijos del wiget supera en cantidad el tamaño del contenedor!
         child: SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(height: 250),
               CardContainer(
-                  child: Column(
-                children: [
-                  SizedBox(height: 10),
-                  Text('Bienvenido',
-                      style: Theme.of(context).textTheme.headlineMedium),
-                  SizedBox(height: 30),
-                  ChangeNotifierProvider(
-                    create: (_) => LoginFormProvider(),
-                    child: _LoginForm(),
-                  )
-                ],
-              )),
-              SizedBox(height: 50),
-              TextButton(
-                onPressed: () =>
-                    Navigator.pushReplacementNamed(context, 'register'),
-                style: ButtonStyle(
-                    overlayColor:
-                        MaterialStateProperty.all(Colors.blue.withOpacity(0.1)),
-                    shape: MaterialStateProperty.all(StadiumBorder())),
-                child: Text('Crear una nueva cuenta',
-                    style: TextStyle(fontSize: 18, color: Colors.black87)),
+                child: Column(
+                  children: [
+                    SizedBox(height: 10),
+                    Text('Bienvenid@',
+                        style: Theme.of(context).textTheme.headlineMedium),
+                    SizedBox(height: 30),
+                    ChangeNotifierProvider(
+                      create: (_) => LoginFormProvider(),
+                      child: _LoginForm(),
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: 50)
+              //SizedBox(height: 50),
+              //myButton,//*Boton para registrarse crear nueva cuenta!
+              SizedBox(height: 50),
             ],
           ),
         ),
@@ -66,7 +60,7 @@ class _LoginForm extends StatelessWidget {
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecorations.authImputDecoration(
                     hintText: 'sfhogar@google.com',
-                    labelText: 'Correo electronico',
+                    labelText: 'Usuario',
                     prefixIcon: Icons.alternate_email_outlined),
                 onChanged: (value) => loginForm.email = value,
                 /*validator: (value) {

@@ -6,7 +6,6 @@ import 'package:sfh_flutter/share_preferences/preferences.dart';
 import 'providers/themes_provider.dart';
 import 'screens/screen.dart';
 import 'services/auth_service.dart';
-import 'themes/theme.dart';
 //import 'roles/user_roles.dart';
 
 void main() async {

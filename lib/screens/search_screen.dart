@@ -24,7 +24,7 @@ class _SearchScreenState extends State<SearchScreen> {
     });
 
     final response = await http.get(Uri.parse(
-        'http://192.168.1.233:8080/datasnap/rest/TSFHWebSvr/cliente/$_docNumber'));
+        'http://192.168.1.102:8080/datasnap/rest/TSFHWebSvr/cliente/$_docNumber'));
 
     setState(() {
       _isLoading = false;
