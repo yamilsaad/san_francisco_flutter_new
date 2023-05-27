@@ -41,6 +41,7 @@ dependencies:
   syncfusion_flutter_charts: ^21.1.39
   http: ^0.13.5
   shared_preferences: ^2.1.0
+  twilio_flutter: ^0.0.9
   
 
 dev_dependencies:
