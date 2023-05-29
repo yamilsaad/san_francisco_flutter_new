@@ -16,7 +16,7 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     twilioFlutter = TwilioFlutter(
       accountSid: 'AC1e5a17bda8d531fe21a72a0c59f3d24b',
-      authToken: 'dc0db32a96209583d284aa0760cc46e4',
+      authToken: '16697d316d95edbd5ecb82ee09f750ec',
       twilioNumber: '+13158475290',
     );
     super.initState();
@@ -40,7 +40,8 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        toolbarHeight: 80,
+        //automaticallyImplyLeading: false,
         title: Text(widget.title),
         centerTitle: true,
       ),

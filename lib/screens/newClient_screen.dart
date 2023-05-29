@@ -87,7 +87,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
   void _sendData(DateTime fechaHora) async {
     //!Ingresar Web Service!!!!!!!!!
     final url =
-        Uri.parse('http://192.168.1.102:8080/datasnap/rest/TSFHWebSvr/usuario');
+        Uri.parse('http://192.168.1.227:8080/datasnap/rest/TSFHWebSvr/usuario');
     final headers = {'Content-Type': 'application/json'};
     final body = {
       'DOMICILIO1':
@@ -130,7 +130,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
         // Realizar la petición GET para verificar si el cliente ya existe
         final dni = dataValues[4];
         final url = Uri.parse(
-            'http://192.168.1.102:8080/datasnap/rest/TSFHWebSvr/cliente/$dni');
+            'http://192.168.1.227:8080/datasnap/rest/TSFHWebSvr/cliente/$dni');
         final response = await http.get(url);
         if (response.statusCode == 200) {
           // El web service respondió correctamente
@@ -204,6 +204,8 @@ class _NewClienScreenState extends State<NewClienScreen> {
   @override
   Widget build(BuildContext context) {
     TextEditingController _celularController = TextEditingController();
+    ButtonSms buttonSms = ButtonSms();
+    TextButton smsButton = buttonSms.buttonSms(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -278,6 +280,13 @@ class _NewClienScreenState extends State<NewClienScreen> {
                     ],
                   ),
                 ),
+                SizedBox(height: 30),
+                SizedBox(
+                  //*Botón ENVIAR SMS:
+                  width: 350,
+                  child: buttonSms.buttonSms(context),
+                ),
+
                 /*Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
