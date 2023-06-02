@@ -16,10 +16,23 @@ class NewClienScreen extends StatefulWidget {
 }
 
 class _NewClienScreenState extends State<NewClienScreen> {
+  final TextEditingController totalReciboController = TextEditingController();
+  final TextEditingController fechaReciboController = TextEditingController();
+
+  @override
+  void dispose() {
+    totalReciboController.dispose();
+    super.dispose();
+  }
+
+  void dispose2() {
+    fechaReciboController.dispose();
+    super.dispose();
+  }
+
   //*______________________________
   bool _isContainerVisible = false;
   //invisibiliza contenedor.
-
   String _data = "";
   //variable donde se guarda la información escaneada(_data)
   String selectedLocalidad = '';
@@ -87,7 +100,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
   void _sendData(DateTime fechaHora) async {
     //!Ingresar Web Service!!!!!!!!!
     final url =
-        Uri.parse('http://192.168.1.227:8080/datasnap/rest/TSFHWebSvr/usuario');
+        Uri.parse('http://192.168.1.102:8080/datasnap/rest/TSFHWebSvr/usuario');
     final headers = {'Content-Type': 'application/json'};
     final body = {
       'DOMICILIO1':
@@ -99,7 +112,9 @@ class _NewClienScreenState extends State<NewClienScreen> {
       'foto_usuario': [],
       'fotos':
           [], // aquí puedes agregar las rutas de las fotos que hayas tomado en tu app
-      'fecha': DateTime.now().toString() // incluye la fecha y hora actual
+      'fecha': DateTime.now().toString(), // incluye la fecha y hora actual
+      'total_recibo': totalReciboController.text,
+      'fecha_recibo': fechaReciboController.text,
     };
 
     final response =
@@ -130,7 +145,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
         // Realizar la petición GET para verificar si el cliente ya existe
         final dni = dataValues[4];
         final url = Uri.parse(
-            'http://192.168.1.227:8080/datasnap/rest/TSFHWebSvr/cliente/$dni');
+            'http://192.168.1.102:8080/datasnap/rest/TSFHWebSvr/cliente/$dni');
         final response = await http.get(url);
         if (response.statusCode == 200) {
           // El web service respondió correctamente
@@ -205,7 +220,6 @@ class _NewClienScreenState extends State<NewClienScreen> {
   Widget build(BuildContext context) {
     TextEditingController _celularController = TextEditingController();
     ButtonSms buttonSms = ButtonSms();
-    TextButton smsButton = buttonSms.buttonSms(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -263,7 +277,13 @@ class _NewClienScreenState extends State<NewClienScreen> {
                         },
                       ),
                       SizedBox(height: 15),
-
+                      //*Input Total Recibo:
+                      TotalRecibo(totalreciboController: totalReciboController),
+                      SizedBox(height: 4),
+                      //*Input Fecha inicio Recibo:
+                      FechaRecibo(fechareciboController: fechaReciboController),
+                      SizedBox(height: 15),
+                      //*Información Scaneada:
                       TextInfoDNI(), //Titulo Info DNI
                       SizedBox(height: 5),
                       //*Información Scaneada:
@@ -284,7 +304,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
                 SizedBox(
                   //*Botón ENVIAR SMS:
                   width: 350,
-                  child: buttonSms.buttonSms(context),
+                  child: buttonSms.buttonSms(context, _celularController),
                 ),
 
                 /*Container(

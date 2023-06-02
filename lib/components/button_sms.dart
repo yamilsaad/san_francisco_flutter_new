@@ -3,7 +3,8 @@ import 'package:twilio_flutter/twilio_flutter.dart';
 import 'dart:math';
 
 class ButtonSms {
-  TextButton buttonSms(BuildContext context) {
+  TextButton buttonSms(
+      BuildContext context, TextEditingController celularController) {
     return TextButton(
       style: ButtonStyle(
         padding: MaterialStateProperty.all(EdgeInsets.all(15)),
@@ -12,7 +13,8 @@ class ButtonSms {
       ),
       onPressed: () async {
         String codigoValidacion = generarCodigoValidacion();
-        bool numeroExiste = await enviarSms(codigoValidacion);
+        bool numeroExiste =
+            await enviarSms(codigoValidacion, celularController.text);
 
         showDialog(
           context: context,
@@ -50,16 +52,16 @@ class ButtonSms {
     return codigo.toString();
   }
 
-  Future<bool> enviarSms(String codigoValidacion) async {
+  Future<bool> enviarSms(String codigoValidacion, String phoneNumber) async {
     TwilioFlutter twilioFlutter = TwilioFlutter(
       accountSid: 'AC1e5a17bda8d531fe21a72a0c59f3d24b',
-      authToken: '16697d316d95edbd5ecb82ee09f750ec',
+      authToken: 'a56009db7ec8ef5b9a9ca3111f4da469',
       twilioNumber: '+13158475290',
     );
 
     try {
       await twilioFlutter.sendSMS(
-        toNumber: '+542645748636',
+        toNumber: '+54$phoneNumber',
         messageBody: 'Tu código de validación es: $codigoValidacion',
       );
       return true;

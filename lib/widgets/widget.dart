@@ -6,4 +6,6 @@ export 'package:sfh_flutter/widgets/info_dni.dart';
 export 'package:sfh_flutter/widgets/input_cel.dart';
 export 'package:sfh_flutter/widgets/search_widget.dart';
 export 'package:sfh_flutter/widgets/select_localidad.dart';
+export 'package:sfh_flutter/widgets/total_recibo.dart';
 export 'package:sfh_flutter/widgets/trabajo_tipo.dart';
+export 'package:sfh_flutter/widgets/fecha_recibo.dart';

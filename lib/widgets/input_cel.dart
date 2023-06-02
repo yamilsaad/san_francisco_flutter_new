@@ -11,18 +11,9 @@ class InputCelWidget extends StatefulWidget {
 }
 
 class _InputCelWidgetState extends State<InputCelWidget> {
-  GlobalKey<FormState> _formKey =
-      GlobalKey<FormState>(); // Clave del formulario
-  bool _isPhoneNumberValid =
-      true; // Variable para almacenar el estado de validación
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isPhoneNumberValid = true;
 
-  @override
-  void dispose() {
-    widget.celularController.dispose();
-    super.dispose();
-  }
-
-  // Función de validación personalizada
   String? _validatePhoneNumber(String? value) {
     if (value == null || value.isEmpty) {
       return 'Ingrese un número de teléfono';
@@ -30,7 +21,7 @@ class _InputCelWidgetState extends State<InputCelWidget> {
     if (value.length < 10) {
       return 'El número de teléfono debe tener al menos 10 dígitos';
     }
-    return null; // La validación es exitosa
+    return null;
   }
 
   @override
@@ -38,9 +29,8 @@ class _InputCelWidgetState extends State<InputCelWidget> {
     return Container(
       margin: EdgeInsets.all(16.0),
       child: Form(
-        key: _formKey, // Asigna la clave del formulario
-        autovalidateMode: AutovalidateMode
-            .onUserInteraction, // Muestra errores al interactuar con el campo
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           children: [
             TextFormField(
@@ -52,10 +42,8 @@ class _InputCelWidgetState extends State<InputCelWidget> {
                 border: OutlineInputBorder(),
                 hintText: '0264 155000000',
               ),
-              validator:
-                  _validatePhoneNumber, // Asigna la función de validación
+              validator: _validatePhoneNumber,
               onChanged: (value) {
-                // Restablece el estado de validación al cambiar el texto
                 setState(() {
                   _isPhoneNumberValid = true;
                 });

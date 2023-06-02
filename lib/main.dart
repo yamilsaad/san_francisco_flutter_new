@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
                 title: 'map',
               ),
           "search_item": (context) => SearchScreen(),
+          "credixsa": (context) => CredixsaScreen(key: UniqueKey()),
         },
         theme: Provider.of<ThemeProvider>(context).currentTheme,
       ),

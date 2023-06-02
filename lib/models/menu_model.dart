@@ -25,6 +25,10 @@ class MenuOption extends StatelessWidget {
         _menuItem5(context, 'Buscar', Icons.search, Colors.grey, '/opcion5',
             size: 100,
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
+        _menuItem6(context, 'Credixsa Consulta', Icons.monetization_on_rounded,
+            Colors.grey, '/opcion6',
+            size: 100,
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
         SizedBox(height: 50),
       ],
     );
@@ -210,6 +214,47 @@ Widget _menuItem5(BuildContext context, String title, IconData icon,
         boxShadow: [
           BoxShadow(
             color: Colors.grey,
+            blurRadius: 5.0,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            color: Colors.white,
+            size: 40,
+          ),
+          SizedBox(
+            height: 16.0,
+          ),
+          Text(
+            title,
+            style: TextStyle(color: Colors.white, fontSize: 18.0),
+          )
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _menuItem6(BuildContext context, String title, IconData icon,
+    Color color, String route,
+    {double size = 100, EdgeInsets padding = EdgeInsets.zero}) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.of(context).pushNamed('credixsa');
+    },
+    child: Container(
+      margin: EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Colors.pink,
+        borderRadius: BorderRadius.circular(16.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.yellow,
             blurRadius: 5.0,
             offset: Offset(0, 3),
           ),
