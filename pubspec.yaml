@@ -43,6 +43,7 @@ dependencies:
   shared_preferences: ^2.1.0
   twilio_flutter: ^0.0.9
   intl: ^0.18.1
+  signature: ^5.4.0
   
 
 dev_dependencies:

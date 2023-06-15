@@ -9,3 +9,5 @@ export 'package:sfh_flutter/widgets/select_localidad.dart';
 export 'package:sfh_flutter/widgets/total_recibo.dart';
 export 'package:sfh_flutter/widgets/trabajo_tipo.dart';
 export 'package:sfh_flutter/widgets/fecha_recibo.dart';
+export 'package:sfh_flutter/widgets/firma_widget.dart';
+export 'package:sfh_flutter/widgets/text_title.dart';

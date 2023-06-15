@@ -18,6 +18,7 @@ class NewClienScreen extends StatefulWidget {
 class _NewClienScreenState extends State<NewClienScreen> {
   final TextEditingController totalReciboController = TextEditingController();
   final TextEditingController fechaReciboController = TextEditingController();
+  final FirmaWidget firmaWidget = FirmaWidget();
 
   @override
   void dispose() {
@@ -102,6 +103,8 @@ class _NewClienScreenState extends State<NewClienScreen> {
     final url =
         Uri.parse('http://192.168.1.102:8080/datasnap/rest/TSFHWebSvr/usuario');
     final headers = {'Content-Type': 'application/json'};
+    final firmaData =
+        firmaWidget.obtenerFirmaData(); // Obtener los datos de la firma
     final body = {
       'DOMICILIO1':
           selectedLocalidad, // remplaza selectedLocalidad con la variable que contiene el valor seleccionado en tu SelectLocalidad
@@ -115,6 +118,7 @@ class _NewClienScreenState extends State<NewClienScreen> {
       'fecha': DateTime.now().toString(), // incluye la fecha y hora actual
       'total_recibo': totalReciboController.text,
       'fecha_recibo': fechaReciboController.text,
+      'firmaData': firmaData,
     };
 
     final response =
@@ -249,7 +253,9 @@ class _NewClienScreenState extends State<NewClienScreen> {
                     children: [
                       SizedBox(height: 50),
 
-                      TextInfoNewClient(), //Titulo info nuevo cliente
+                      TextTitleWidget(
+                        texto_title: 'Informacion Nuevo Cliente',
+                      ), //Titulo info nuevo cliente
 
                       SizedBox(height: 10),
 
@@ -284,7 +290,9 @@ class _NewClienScreenState extends State<NewClienScreen> {
                       FechaRecibo(fechareciboController: fechaReciboController),
                       SizedBox(height: 15),
                       //*Información Scaneada:
-                      TextInfoDNI(), //Titulo Info DNI
+                      TextTitleWidget(
+                        texto_title: '#1 Scanear DNI',
+                      ), //Titulo Info DNI
                       SizedBox(height: 5),
                       //*Información Scaneada:
                       Visibility(
@@ -293,10 +301,18 @@ class _NewClienScreenState extends State<NewClienScreen> {
                       SizedBox(
                         height: 5,
                       ),
-                      TextTitleFotos(),
+                      TextTitleWidget(
+                        texto_title:
+                            '#2 Foto de Cliente, Recibo de sueldo, Boleta de Srevicio y DNI',
+                      ),
                       //*Fotos sacadas:
                       ImageUsuario(),
                       ImageCam(),
+                      //*Firma de Cliente:
+                      TextTitleWidget(
+                        texto_title: 'Firme aquí...',
+                      ),
+                      FirmaWidget(),
                     ],
                   ),
                 ),
@@ -306,7 +322,6 @@ class _NewClienScreenState extends State<NewClienScreen> {
                   width: 350,
                   child: buttonSms.buttonSms(context, _celularController),
                 ),
-
                 /*Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
@@ -379,75 +394,4 @@ class _NewClienScreenState extends State<NewClienScreen> {
               ))),
     );
   }*/
-}
-
-//Titulo de fotos sacadas:
-class TextTitleFotos extends StatelessWidget {
-  const TextTitleFotos({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 30),
-      child: Padding(
-        padding: const EdgeInsets.all(5),
-        child: Center(
-          child: Text(
-            '#2 Foto de Cliente, Recibo de sueldo, Boleta de Srevicio y DNI',
-            style: TextStyle(
-                fontSize: 25, color: Colors.blue, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-//Titulo info dni:
-class TextInfoDNI extends StatelessWidget {
-  const TextInfoDNI({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 30),
-      child: Padding(
-        padding: const EdgeInsets.all(5),
-        child: Center(
-          child: Text(
-            '#1 Scanear DNI',
-            style: TextStyle(
-                fontSize: 25, color: Colors.blue, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-//Titulo info nuevo cliente:
-class TextInfoNewClient extends StatelessWidget {
-  const TextInfoNewClient({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text(
-          'Informacion Nuevo Cliente',
-          style: TextStyle(
-              fontSize: 25, color: Colors.blue, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
 }
