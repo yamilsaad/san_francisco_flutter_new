@@ -44,6 +44,9 @@ dependencies:
   twilio_flutter: ^0.0.9
   intl: ^0.18.1
   signature: ^5.4.0
+  pdf: ^3.10.4
+  path_provider: ^2.0.15
+  printing: ^5.11.0
   
 
 dev_dependencies:
